@@ -1,10 +1,10 @@
 import Layout from "@/components/Layout";
 import Header from "@/components/viewCV/Header";
+import {useState} from "react";
 import LeftBar from "@/components/viewCV/LeftBar";
-import CentralBar from "@/components/viewCV/CentralBar";
 
-export default function Home() {
-    const mainInfo = {
+const Edit = () => {
+    const mainInfoFromBlockchain = {
         name: "Andrey Solovov",
         position: "Blockchain developer",
         hello: `Hello there! Welcome to my crazy web3 CV. It is a web3 CV because it gets all the content from the ethereum Georli test net. You can see smart-contract and front repositories by the links. I am a blockchain developer and I am looking for a remote full-time or freelance job. I can write and test solidity smart-contracts, make front-end prototypes, create main front logic with ethers.js and even guide less skilled solidity developers and testers. Enjoy exploring this web app and remember to set likes on cases, if you have metamask and Georli test tokens! You can also check how this app works looking at the code and edit section.`,
@@ -23,41 +23,38 @@ export default function Home() {
             github: { value: "/asolovov", link: "https://github.com/asolovov" },
         },
         skills: [
-            { id: 1, name: "Solidity", description: "Strong knowledge, main cases, QA" },
-            { id: 2, name: "NextJS", description: "Prototypes, ethers.js logic" },
-            { id: 3, name: "PSQL", description: "FTS, simple queries, backand logic" },
-            { id: 4, name: "Python", description: "Django pet-projects" },
-            { id: 5, name: "GO", description: "Actively studying" },
+            { name: "Solidity", description: "Strong knowledge, main cases, QA" },
+            { name: "NextJS", description: "Prototypes, ethers.js logic" },
+            { name: "PSQL", description: "FTS, simple queries, backand logic" },
+            { name: "Python", description: "Django pet-projects" },
+            { name: "GO", description: "Actively studying" },
         ],
     };
-    const cases = [
-        {
-            id: 0,
-            info: {
-                name: "Geometries project",
-                link: "https://arsnl.art/geometries/i",
-                performance: "QA: test cases with TS hardhat framework, contract bug fix, full flow test",
-                team: "Uddug",
-                description: `The contract implemented the ERC721 standard in the ERC721A variant. For mechanics that we have implemented, we usually take ERC1155 standard, but ERC721 was a mandatory requirement of the customer. Due to the unusual implementation, contract testing was a challenge, which we passed with dignity.`,
-                features: [
-                    "Public and private sale",
-                    "Deny-listing addresses",
-                    "Freezing collection",
-                    "Editions of ERC721 tokens",
-                ],
-            },
-            startDate: 1661644800,
-            endDate: 1662854400,
-            likes: 1,
-        },
-    ];
-    const totalLikes = 1;
 
-    const header = <Header name={mainInfo.name} hello={mainInfo.hello} position={mainInfo.position} isEdit={false}/>
-    const leftBar = <LeftBar mainInfo={mainInfo}/>
-    const centralBar = <CentralBar cases={cases} totalLikes={totalLikes} education={mainInfo.education} background={mainInfo.background}/>
+    const [name, setName] = useState(mainInfoFromBlockchain.name);
+    const [hello, setHello] = useState(mainInfoFromBlockchain.hello);
+    const [position, setPosition] = useState(mainInfoFromBlockchain.position);
+    const [mainInfo, setMainInfo] = useState(mainInfoFromBlockchain);
+
+    const header = <Header
+        name={name}
+        setName={setName}
+        hello={hello}
+        setHello={setHello}
+        position={position}
+        setPosition={setPosition}
+        isEdit={true}
+    />
+
+    const leftBar = <LeftBar
+        setMainInfo={setMainInfo}
+        mainInfo={mainInfo}
+        isEdit={true}
+    />
 
     return (
-        <Layout header={header} leftBar={leftBar} centralBar={centralBar}/>
-    )
-}
+        <Layout header={header} leftBar={leftBar}/>
+    );
+};
+
+export default Edit;
