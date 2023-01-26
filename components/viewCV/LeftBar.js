@@ -5,9 +5,7 @@ import {IoLogoLinkedin} from "react-icons/io";
 import Skills from "@/components/viewCV/Skills";
 
 const LeftBar = ({mainInfo, setMainInfo, isEdit}) => {
-    let location;
-    let contacts;
-    let skills;
+    let location, contacts, skills;
 
     if (isEdit) {
 

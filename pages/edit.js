@@ -2,6 +2,7 @@ import Layout from "@/components/Layout";
 import Header from "@/components/viewCV/Header";
 import {useState} from "react";
 import LeftBar from "@/components/viewCV/LeftBar";
+import CentralBar from "@/components/viewCV/CentralBar";
 
 const Edit = () => {
     const mainInfoFromBlockchain = {
@@ -31,10 +32,33 @@ const Edit = () => {
         ],
     };
 
+    const casesFromBlockchain = [
+        {
+            id: 0,
+            info: {
+                name: "Geometries project",
+                link: "https://arsnl.art/geometries/i",
+                performance: "QA: test cases with TS hardhat framework, contract bug fix, full flow test",
+                team: "Uddug",
+                description: `The contract implemented the ERC721 standard in the ERC721A variant. For mechanics that we have implemented, we usually take ERC1155 standard, but ERC721 was a mandatory requirement of the customer. Due to the unusual implementation, contract testing was a challenge, which we passed with dignity.`,
+                features: [
+                    "Public and private sale",
+                    "Deny-listing addresses",
+                    "Freezing collection",
+                    "Editions of ERC721 tokens",
+                ],
+            },
+            startDate: 1661644800,
+            endDate: 1662854400,
+            likes: 1,
+        },
+    ];
+
     const [name, setName] = useState(mainInfoFromBlockchain.name);
     const [hello, setHello] = useState(mainInfoFromBlockchain.hello);
     const [position, setPosition] = useState(mainInfoFromBlockchain.position);
     const [mainInfo, setMainInfo] = useState(mainInfoFromBlockchain);
+    const [cases, setCases] = useState(casesFromBlockchain);
 
     const header = <Header
         name={name}
@@ -52,8 +76,17 @@ const Edit = () => {
         isEdit={true}
     />
 
+    const centralBar = <CentralBar
+        mainInfo={mainInfo}
+        setMainInfo={setMainInfo}
+        cases={cases}
+        setCases={setCases}
+        totalLikes={1}
+        isEdit={true}
+    />
+
     return (
-        <Layout header={header} leftBar={leftBar}/>
+        <Layout header={header} leftBar={leftBar} centralBar={centralBar}/>
     );
 };
 

@@ -14,7 +14,7 @@ const Skills = ({mainInfo, isEdit, setMainInfo}) => {
     const add = isEdit
         ?
         <>
-            <p>Add new skill</p>
+            <button className={"btn btn-secondary mt-3 w-100"} onClick={handleNewSkill}>Add new skill</button>
             <input
                 type={"text"}
                 className={"form-control mt-3"}
@@ -29,15 +29,14 @@ const Skills = ({mainInfo, isEdit, setMainInfo}) => {
                 onChange={event => setNewDescription(event.target.value)}
                 placeholder={"skill description"}
             />
-            <button className={"btn btn-primary mt-3"} onClick={handleNewSkill}>Add</button>
         </>
         : null
 
     return (
         <>
             {add}
-            {mainInfo.skills && mainInfo.skills.map((skill, index) =>
-                <Skill index={index} skill={skill} mainInfo={mainInfo} setMainInfo={setMainInfo} key={index} isEdit={isEdit}/>
+            {mainInfo.skills && mainInfo.skills.map((_, index) =>
+                <Skill index={index} mainInfo={mainInfo} setMainInfo={setMainInfo} key={index} isEdit={isEdit}/>
             )}
         </>
     );

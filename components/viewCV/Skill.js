@@ -1,8 +1,5 @@
-import {AiFillMinusCircle} from "react-icons/ai";
-import styled from "styled-components";
 import {FaCode} from "react-icons/fa";
 import {SiGoland, SiPostgresql, SiPython, SiSolidity, SiVercel} from "react-icons/si";
-import {BsFillArrowUpCircleFill, BsFillArrowDownCircleFill} from "react-icons/bs";
 
 const icons = {
     Solidity: <SiSolidity className={"color-indigo"}/>,
@@ -12,7 +9,7 @@ const icons = {
     GO: <SiGoland className={"color-indigo"}/>,
 }
 
-const Skill = ({skill, index, mainInfo, setMainInfo, isEdit}) => {
+const Skill = ({index, mainInfo, setMainInfo, isEdit}) => {
 
     const deleteSkill = () => {
         let newMainInfo = Object.create(mainInfo);
@@ -36,36 +33,51 @@ const Skill = ({skill, index, mainInfo, setMainInfo, isEdit}) => {
         setMainInfo(newMainInfo);
     }
 
-    const name = isEdit
-        ? <h6>{<Minus onClick={deleteSkill}/>} {skill.name}</h6>
-        : <h6>{icons[skill.name] ? icons[skill.name] : <FaCode className={"color-indigo"}/>} {skill.name}</h6>
+    const handleChange = (target, event) => {
+        let newMainInfo = Object.create(mainInfo);
+        newMainInfo.education[index][target] = event.target.value;
+        setMainInfo(newMainInfo);
+    }
 
 
     return (
         <>
             {isEdit ? <hr/> : null}
             <div className={"mt-3"}>
-                {name}
-                <small>{skill.description}</small>
+                {isEdit
+                    ? <>
+                        <input
+                            className={"form-control mb-2"}
+                            value={mainInfo.skills[index].name}
+                            onChange={event => handleChange("name", event)}
+                        />
+                        <input
+                            className={"form-control"}
+                            value={mainInfo.skills[index].description}
+                            onChange={event => handleChange("description", event)}
+                        />
+                    </>
+                    : <>
+                        <h6>{icons[mainInfo.skills[index].name]
+                            ? icons[mainInfo.skills[index].name]
+                            : <FaCode className={"color-indigo"}/>
+                        }
+                            {mainInfo.skills[index].name}
+                        </h6>
+                        <small>{mainInfo.skills[index].description}</small>
+                    </>
+                }
             </div>
-            {isEdit ? <><Up onClick={upSkill}/><Down onClick={downSkill}/></> : null}
+            {isEdit
+                ?
+                <div className={"btn-group mt-2"}>
+                    <button className={"btn btn-outline-danger"} onClick={deleteSkill}>Delete</button>
+                    <button className={"btn btn-outline-success"} onClick={upSkill}>Up</button>
+                    <button className={"btn btn-outline-primary"} onClick={downSkill}>Down</button>
+                </div>
+                : null}
         </>
     );
 };
-
-const Minus = styled(AiFillMinusCircle)`
-  color: #6610f2;
-  cursor: pointer;
-`;
-
-const Up = styled(BsFillArrowUpCircleFill)`
-  color: #6610f2;
-  cursor: pointer;
-`
-
-const Down = styled(BsFillArrowDownCircleFill)`
-  color: #6610f2;
-  cursor: pointer;
-`
 
 export default Skill;

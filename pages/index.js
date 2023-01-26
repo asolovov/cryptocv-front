@@ -55,7 +55,7 @@ export default function Home() {
 
     const header = <Header name={mainInfo.name} hello={mainInfo.hello} position={mainInfo.position} isEdit={false}/>
     const leftBar = <LeftBar mainInfo={mainInfo}/>
-    const centralBar = <CentralBar cases={cases} totalLikes={totalLikes} education={mainInfo.education} background={mainInfo.background}/>
+    const centralBar = <CentralBar mainInfo={mainInfo} cases={cases} totalLikes={totalLikes}/>
 
     return (
         <Layout header={header} leftBar={leftBar} centralBar={centralBar}/>
