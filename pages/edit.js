@@ -58,9 +58,8 @@ const Edit = () => {
     const [cases, setCases] = useState(casesFromBlockchain);
 
     const pushMainInfo = async () => {
-        console.log(mainInfo);
         const mainInfoJSON = JSON.stringify(mainInfo);
-        console.log(mainInfoJSON);
+
     }
 
     const header = <Header

@@ -6,8 +6,6 @@ const Header = ({mainInfo, setMainInfo, isEdit, push}) => {
     let Name, Hello, Position;
     const {name, hello, position} = mainInfo;
 
-    console.log("Header", mainInfo)
-
     const handleChange = (target, event) => {
         let newMainInfo = Object.assign({}, mainInfo);
         newMainInfo[target] = event.target.value;
