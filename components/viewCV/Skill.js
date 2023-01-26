@@ -12,21 +12,21 @@ const icons = {
 const Skill = ({index, mainInfo, setMainInfo, isEdit}) => {
 
     const deleteSkill = () => {
-        let newMainInfo = Object.create(mainInfo);
+        let newMainInfo = Object.assign({}, mainInfo);
         newMainInfo.skills.splice(index, 1);
         setMainInfo(newMainInfo);
     }
 
     const upSkill = () => {
         if (index === 0) return;
-        let newMainInfo = Object.create(mainInfo);
+        let newMainInfo = Object.assign({}, mainInfo);
         const element = newMainInfo.skills.splice(index, 1)[0];
         newMainInfo.skills.splice(index-1, 0, element);
         setMainInfo(newMainInfo);
     }
 
     const downSkill = () => {
-        let newMainInfo = Object.create(mainInfo);
+        let newMainInfo = Object.assign({}, mainInfo);
         if (index === newMainInfo.length - 1) return;
         const element = newMainInfo.skills.splice(index, 1)[0];
         newMainInfo.skills.splice(index+1, 0, element);
@@ -34,8 +34,8 @@ const Skill = ({index, mainInfo, setMainInfo, isEdit}) => {
     }
 
     const handleChange = (target, event) => {
-        let newMainInfo = Object.create(mainInfo);
-        newMainInfo.education[index][target] = event.target.value;
+        let newMainInfo = Object.assign({}, mainInfo);
+        newMainInfo.skills[index][target] = event.target.value;
         setMainInfo(newMainInfo);
     }
 

@@ -2,8 +2,17 @@ import styled from "styled-components";
 import {AiOutlineEdit, AiFillEye} from "react-icons/ai";
 import Link from "next/link";
 
-const Header = ({name, setName, position, setPosition, hello, setHello, isEdit}) => {
+const Header = ({mainInfo, setMainInfo, isEdit, push}) => {
     let Name, Hello, Position;
+    const {name, hello, position} = mainInfo;
+
+    console.log("Header", mainInfo)
+
+    const handleChange = (target, event) => {
+        let newMainInfo = Object.assign({}, mainInfo);
+        newMainInfo[target] = event.target.value;
+        setMainInfo(newMainInfo);
+    }
 
     if (isEdit) {
         Name =
@@ -11,28 +20,28 @@ const Header = ({name, setName, position, setPosition, hello, setHello, isEdit})
                 <input type={"text"}
                        className="form-control w-50 me-auto"
                        value={name}
-                       onChange={(event) => setName(event.target.value)}
+                       onChange={event => handleChange("name", event)}
                 />
-                <button className={"btn btn-outline-light"}>Push Main Info</button>
+                <button className={"btn btn-outline-light"} onClick={push}>Push Main Info</button>
                 <Link href={"/"}>
                     <View/>
                 </Link>
-            </>
+            </>;
 
         Position =
             <input type={"text"}
                    className="form-control w-50 mt-2"
                    value={position}
-                   onChange={(event) => setPosition(event.target.value)}
-            />
+                   onChange={event => handleChange("position", event)}
+            />;
 
         Hello =
             <textarea
                 className="form-control"
                 value={hello}
-                onChange={(event) => setHello(event.target.value)}
+                onChange={event => handleChange("hello", event)}
                 rows={7}
-            />
+            />;
 
     } else {
         Name =
@@ -41,10 +50,10 @@ const Header = ({name, setName, position, setPosition, hello, setHello, isEdit})
                 <Link href={"/edit"}>
                     <Edit/>
                 </Link>
-            </>
+            </>;
 
-        Position =                 <h5 className="card-subtitle">{position}</h5>
-        Hello =                 <p className="card-text lead">{hello}</p>
+        Position = <h5 className="card-subtitle">{position}</h5>;
+        Hello = <p className="card-text lead">{hello}</p>;
 
     }
 

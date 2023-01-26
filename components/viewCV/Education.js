@@ -1,21 +1,21 @@
 const Education = ({index, mainInfo, setMainInfo, isEdit}) => {
 
     const deleteEd = () => {
-        let newMainInfo = Object.create(mainInfo);
+        let newMainInfo = Object.assign({}, mainInfo);
         newMainInfo.education.splice(index, 1);
         setMainInfo(newMainInfo);
     }
 
     const upEd = () => {
         if (index === 0) return;
-        let newMainInfo = Object.create(mainInfo);
+        let newMainInfo = Object.assign({}, mainInfo);
         const element = newMainInfo.education.splice(index, 1)[0];
         newMainInfo.education.splice(index-1, 0, element);
         setMainInfo(newMainInfo);
     }
 
     const downEd = () => {
-        let newMainInfo = Object.create(mainInfo);
+        let newMainInfo = Object.assign({}, mainInfo);
         if (index === newMainInfo.length - 1) return;
         const element = newMainInfo.education.splice(index, 1)[0];
         newMainInfo.education.splice(index+1, 0, element);
@@ -23,7 +23,7 @@ const Education = ({index, mainInfo, setMainInfo, isEdit}) => {
     }
 
     const handleChange = (target, event) => {
-        let newMainInfo = Object.create(mainInfo);
+        let newMainInfo = Object.assign({}, mainInfo);
         newMainInfo.education[index][target] = event.target.value;
         setMainInfo(newMainInfo);
     }

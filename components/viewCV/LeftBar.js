@@ -10,13 +10,13 @@ const LeftBar = ({mainInfo, setMainInfo, isEdit}) => {
     if (isEdit) {
 
         const handleChangeMainInfo = (event, target) => {
-            let newMainInfo = Object.create(mainInfo);
+            let newMainInfo = Object.assign({}, mainInfo);
             newMainInfo[target] = event.target.value;
             setMainInfo(newMainInfo);
         }
 
         const handleChangeContacts = (event, contact, target) => {
-            let newMainInfo = Object.create(mainInfo);
+            let newMainInfo = Object.assign({}, mainInfo);
             newMainInfo["contacts"][contact][target] = event.target.value;
             setMainInfo(newMainInfo);
         }

@@ -6,7 +6,7 @@ const Educations = ({mainInfo, setMainInfo, isEdit}) => {
     const [newDescription, setNewDescription] = useState('');
 
     const handleNewEd = () => {
-        let newMainInfo = Object.create(mainInfo);
+        let newMainInfo = Object.assign({}, mainInfo);
         newMainInfo.education.push({ year: newYear, description: newDescription });
         setMainInfo(newMainInfo);
     }

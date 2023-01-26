@@ -6,7 +6,7 @@ const Skills = ({mainInfo, isEdit, setMainInfo}) => {
     const [newDescription, setNewDescription] = useState('');
 
     const handleNewSkill = () => {
-        let newMainInfo = Object.create(mainInfo);
+        let newMainInfo = Object.assign({}, mainInfo);
         newMainInfo.skills.push({ name: newName, description: newDescription });
         setMainInfo(newMainInfo);
     }

@@ -5,7 +5,7 @@ const CentralBar = ({mainInfo, setMainInfo, cases, setCases, totalLikes, isEdit}
     let background, education;
 
     const handleSetBackground = (event) => {
-        let newMainInfo = Object.create(mainInfo);
+        let newMainInfo = Object.assign({}, mainInfo);
         newMainInfo.background = event.target.value;
         setMainInfo(newMainInfo);
     }

@@ -53,7 +53,7 @@ export default function Home() {
     ];
     const totalLikes = 1;
 
-    const header = <Header name={mainInfo.name} hello={mainInfo.hello} position={mainInfo.position} isEdit={false}/>
+    const header = <Header mainInfo={mainInfo}/>
     const leftBar = <LeftBar mainInfo={mainInfo}/>
     const centralBar = <CentralBar mainInfo={mainInfo} cases={cases} totalLikes={totalLikes}/>
 

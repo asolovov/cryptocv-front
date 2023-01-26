@@ -54,19 +54,19 @@ const Edit = () => {
         },
     ];
 
-    const [name, setName] = useState(mainInfoFromBlockchain.name);
-    const [hello, setHello] = useState(mainInfoFromBlockchain.hello);
-    const [position, setPosition] = useState(mainInfoFromBlockchain.position);
     const [mainInfo, setMainInfo] = useState(mainInfoFromBlockchain);
     const [cases, setCases] = useState(casesFromBlockchain);
 
+    const pushMainInfo = async () => {
+        console.log(mainInfo);
+        const mainInfoJSON = JSON.stringify(mainInfo);
+        console.log(mainInfoJSON);
+    }
+
     const header = <Header
-        name={name}
-        setName={setName}
-        hello={hello}
-        setHello={setHello}
-        position={position}
-        setPosition={setPosition}
+        mainInfo={mainInfo}
+        setMainInfo={setMainInfo}
+        push={pushMainInfo}
         isEdit={true}
     />
 
