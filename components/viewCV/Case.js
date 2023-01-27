@@ -1,26 +1,28 @@
 import styled from "styled-components";
 import {AiFillLike} from "react-icons/ai";
 import CaseFeatures from "@/components/viewCV/CaseFeatures";
+import {ethers} from "ethers";
+import CVContract from "@/contracts/OnchainCVContract.json";
+import {useState} from "react";
 
 const Case = ({cases, setCases, index, isEdit}) => {
     let header, caseBody, description, features;
-
     const {info, likes, id} = cases[index];
-    const startDate = new Date(cases[index].startDate*1000).toISOString().split('T')[0];
-    const endDate = new Date(cases[index].endDate*1000).toISOString().split('T')[0];
 
-    features = <CaseFeatures cases={cases} setCases={setCases} index={index} isEdit={isEdit}/>;
+    const [startDate, setStartDate] = useState(
+        isNaN(cases[index].startDate) || cases[index].startDate === "0"
+            ? ""
+            : new Date(cases[index].startDate*1000).toISOString().split('T')[0]
+    );
+    const [endDate, setEndDate] = useState(
+        isNaN(cases[index].endDate) || cases[index].endDate === "0"
+            ? ""
+            : new Date(cases[index].endDate*1000).toISOString().split('T')[0]
+    );
 
     const handleChange = (target, event) => {
         let newCases = Array.from(cases);
         newCases[index].info[target] = event.target.value;
-        setCases(newCases);
-    }
-
-    const handleDatesChange = (target, event) => {
-        let newCases = Array.from(cases);
-        const newDate = new Date(event.target.value).valueOf() / 1000;
-        newCases[index][target] = newDate.toString();
         setCases(newCases);
     }
 
@@ -39,14 +41,71 @@ const Case = ({cases, setCases, index, isEdit}) => {
         setCases(newCases);
     }
 
+    const deleteCase = async () => {
+        const { ethereum } = window;
+
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const cVContract = new ethers.Contract(
+            "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+            CVContract.abi,
+            signer
+        );
+
+        await cVContract.removeCase(cases[index].id.toString());
+    }
+
+    const pushChanges = async () => {
+        if (!startDate) {
+            alert("Start date can not be null")
+            return
+        }
+
+        const startDateEpoch = new Date(startDate).valueOf() / 1000;
+        const endDateEpoch = endDate ? new Date(endDate).valueOf() / 1000 : "0";
+        const info = JSON.stringify(cases[index].info);
+
+        const { ethereum } = window;
+
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const cVContract = new ethers.Contract(
+            "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+            CVContract.abi,
+            signer
+        );
+
+        await cVContract.updateCase(
+            cases[index].id.toString(),
+            info,
+            startDateEpoch.toString(),
+            endDateEpoch.toString(),
+        );
+    }
+
+    const setLike = async () => {
+        const { ethereum } = window;
+
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const cVContract = new ethers.Contract(
+            "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+            CVContract.abi,
+            signer
+        );
+
+        await cVContract.setLike(cases[index].id.toString());
+    }
+
+    features = <CaseFeatures cases={cases} setCases={setCases} index={index} isEdit={isEdit}/>;
 
     if (isEdit) {
         header =
             <>
                 <div className={"d-flex"}>
                     <div className={"btn-group mb-2 me-auto"}>
-                        <button className={"btn btn-outline-primary"}>Push changes</button>
-                        <button className={"btn btn-outline-danger"}>Delete case</button>
+                        <button className={"btn btn-outline-primary"} onClick={pushChanges}>Push changes</button>
+                        <button className={"btn btn-outline-danger"} onClick={deleteCase}>Delete case</button>
                     </div>
                     <div className={"btn-group mb-2"}>
                         <button className={"btn btn-outline-success"} onClick={upCase}>Up</button>
@@ -73,9 +132,9 @@ const Case = ({cases, setCases, index, isEdit}) => {
                 </div>
                 <div className={"input-group mt-2 mb-2"}>
                     <span className={"input-group-text"}>Start date</span>
-                    <input type={"date"} className={"form-control"} value={startDate} onChange={event => handleDatesChange("startDate", event)}/>
+                    <input type={"date"} className={"form-control"} value={startDate} onChange={event => setStartDate(event.target.value)}/>
                     <span className={"input-group-text"}>End date</span>
-                    <input type={"date"} className={"form-control"} value={endDate} onChange={event => handleDatesChange("endDate", event)}/>
+                    <input type={"date"} className={"form-control"} value={endDate} onChange={event => setEndDate(event.target.value)}/>
                 </div>
             </>;
 
@@ -90,8 +149,10 @@ const Case = ({cases, setCases, index, isEdit}) => {
     } else {
         header =
             <div className={"d-flex gap-2"}>
-                <h5 className={"card-title"}><a href={info.link}>{info.name}</a></h5>
-                <Like className={"me-auto"}/>
+                <h5 className={"card-title"}>
+                    {info.link ? <a href={info.link}>{info.name}</a> : info.name}
+                </h5>
+                <Like className={"me-auto"} onClick={setLike}/>
                 <span className={"color-indigo h5"}>Likes: {likes}</span>
             </div>;
 
@@ -106,7 +167,7 @@ const Case = ({cases, setCases, index, isEdit}) => {
                 <ul className="list-group list-group-flush">
                     <li className="list-group-item"><strong className={"color-indigo"}>Team:</strong> {info.team}</li>
                     <li className="list-group-item"><strong className={"color-indigo"}>Start date:</strong> {startDate}</li>
-                    <li className="list-group-item"><strong className={"color-indigo"}>End date:</strong> {endDate}</li>
+                    <li className="list-group-item"><strong className={"color-indigo"}>End date:</strong> {endDate ? endDate : "In progress..."}</li>
                 </ul>
             </>;
 

@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import {AiOutlineEdit, AiFillEye} from "react-icons/ai";
 import Link from "next/link";
+import {ethers} from "ethers";
+import CVContract from "@/contracts/OnchainCVContract.json";
 
-const Header = ({mainInfo, setMainInfo, isEdit, push}) => {
+const Header = ({mainInfo, setMainInfo, isEdit}) => {
     let Name, Hello, Position;
     const {name, hello, position} = mainInfo;
 
@@ -12,6 +14,27 @@ const Header = ({mainInfo, setMainInfo, isEdit, push}) => {
         setMainInfo(newMainInfo);
     }
 
+    const pushMainInfo = async () => {
+        const mainInfoJSON = JSON.stringify(mainInfo);
+        const { ethereum } = window;
+
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const cVContract = new ethers.Contract(
+            "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+            CVContract.abi,
+            signer
+        );
+
+        await cVContract.updateMainInfo(mainInfoJSON);
+    }
+
+    const connect = async () => {
+        const { ethereum } = window;
+        await ethereum.request({ method: 'eth_requestAccounts' });
+    }
+
+
     if (isEdit) {
         Name =
             <>
@@ -20,7 +43,10 @@ const Header = ({mainInfo, setMainInfo, isEdit, push}) => {
                        value={name}
                        onChange={event => handleChange("name", event)}
                 />
-                <button className={"btn btn-outline-light"} onClick={push}>Push Main Info</button>
+                <div className={"btn-group"}>
+                    <button className={"btn btn-outline-light"} onClick={pushMainInfo}>Push Main Info</button>
+                    <button className={"btn btn-outline-light"} onClick={connect}>Connect</button>
+                </div>
                 <Link href={"/"}>
                     <View/>
                 </Link>
