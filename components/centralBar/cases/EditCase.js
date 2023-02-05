@@ -4,8 +4,9 @@ import EditFeatures from "@/components/centralBar/cases/features/EditFeatures";
 import {deleteCase, getCases, updateCase} from "@/helpers/casesHelpers";
 
 const EditCase = ({index, cases, setCases, handleActiveAlert, infuraApi}) => {
-    const {info, id} = cases[index];
+    const {id} = cases[index];
 
+    const [info, _] = useState(cases[index].info)
     const [startDate, setStartDate] = useState(
         isNaN(cases[index].startDate) || cases[index].startDate === "0"
             ? ""

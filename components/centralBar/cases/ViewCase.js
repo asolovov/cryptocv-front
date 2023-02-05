@@ -13,11 +13,6 @@ const ViewCase = ({caseEl, setCases, handleActiveAlert}) => {
             ? "In progress..."
             : new Date(caseEl.endDate*1000).toISOString().split('T')[0];
 
-    const performance = info.performance.split(";")
-    console.log("----------")
-    console.log(id)
-    console.log(performance);
-
     const handleSetLike = async () => {
         const respond = await setLike(id);
         if (respond.ok) {

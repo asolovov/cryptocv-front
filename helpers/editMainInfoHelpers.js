@@ -1,12 +1,17 @@
 export const editMainInfo = (mainInfo, setMainInfo, event, target1, target2=null, target3=null) => {
     let newMainInfo = Object.assign({}, mainInfo);
 
+    console.log(event);
+
     if (target3) {
         newMainInfo[target1][target2][target3] = event.target.value;
+        setMainInfo(newMainInfo);
     } else if (target2) {
         newMainInfo[target1][target2] = event.target.value;
+        setMainInfo(newMainInfo);
     } else {
         newMainInfo[target1] = event.target.value;
+        setMainInfo(newMainInfo);
     }
 }
 
