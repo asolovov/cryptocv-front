@@ -1,118 +1,103 @@
 import Layout from "@/components/Layout";
-import Header from "@/components/viewCV/Header";
-import LeftBar from "@/components/viewCV/LeftBar";
-import CentralBar from "@/components/viewCV/CentralBar";
-import debounce from "lodash.debounce";
-import {ethers} from "ethers";
-import CVContract from "@/contracts/OnchainCVContract.json";
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
+import ViewHeader from "@/components/header/ViewHeader";
+import ViewLeftBar from "@/components/leftBar/ViewLeftBar";
+import EditHeader from "@/components/header/EditHeader";
+import EditLeftBar from "@/components/leftBar/EditLeftBar";
+import EditCentralBar from "@/components/centralBar/EditCentralBar";
+import ViewCentralBar from "@/components/centralBar/ViewCentralBar";
+import {getMainInfo} from "@/helpers/mainInfoHelpers";
+import {getTotalLikes} from "@/helpers/likesHelpers";
+import {getCases} from "@/helpers/casesHelpers";
+import Alert from "@/components/Alert";
+import NotOwnerAlert from "@/components/NotOwnerAlert";
 
-export default function Home() {
+export default function Home({infuraApi}) {
+    const [isEdit, setIsEdit] = useState(false);
     const [mainInfo, setMainInfo] = useState({});
-    const [cases, setCases] = useState({});
-    const [totalLikes, setTotalLikes] = useState('');
+    const [cases, setCases] = useState([]);
+    const [totalLikes, setTotalLikes] = useState("-");
+    const [isFailedFetch, setIsFailedFetch] = useState(false);
+    const [errors, setErrors] = useState([]);
+    const [isAlert, setIsAlert] = useState(false);
+    const [alertText, setAlertText] = useState("");
+    const [alertType, setAlertType] = useState("");
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const getMainInfoDebounce = useCallback(
-        debounce(async () => {
-            await getMainInfo();
-        }, 250)
-        , []
-    )
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const getCasesDebounce = useCallback(
-        debounce(async () => {
-            await getCases();
-        }, 250)
-        , []
-    )
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const getTotalLikesDebounce = useCallback(
-        debounce(async () => {
-            await getTotalLikes();
-        }, 250)
-        , []
-    )
-
-    const getTotalLikes = async () => {
-        const { ethereum } = window;
-
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const cVContract = new ethers.Contract(
-            "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-            CVContract.abi,
-            signer
-        );
-
-        const totalLikes = await cVContract.getTotalLikes();
-        setTotalLikes(totalLikes.toString());
+    const handleActiveAlert = (text, type) => {
+        setAlertType(type);
+        setAlertText(text);
+        setIsAlert(true);
     }
 
-    const getCases = async () => {
-        const { ethereum } = window;
-
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const cVContract = new ethers.Contract(
-            "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-            CVContract.abi,
-            signer
-        );
-
-        const Cases = await cVContract.getCases();
-        let cases = [];
-        for (let i = 0; i < Cases.length; i++) {
-            const element = Cases[i];
-            const info = JSON.parse(element.info)
-
-            cases.push({
-                id: element.id.toString(),
-                info: info,
-                startDate: element.startDate.toString(),
-                endDate: element.endDate.toString(),
-                likes: element.likes.toString(),
-            })
-        }
-
-        setCases(cases);
-    }
-
-    const getMainInfo = async () => {
-        const { ethereum } = window;
-
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const cVContract = new ethers.Contract(
-            "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-            CVContract.abi,
-            signer
-        );
-
-        const MainInfo = await cVContract.getMainInfo();
-        const mainInfo = JSON.parse(MainInfo);
-        setMainInfo(mainInfo);
+    const handleCloseAlert = () => {
+        setAlertType("");
+        setAlertText("");
+        setIsAlert(false);
     }
 
     useEffect(() => {
-        getTotalLikesDebounce();
-        getCasesDebounce();
-        getMainInfoDebounce();
-    }, [getTotalLikesDebounce, getCasesDebounce, getMainInfoDebounce])
+        getCases({infuraApi}).then(r => {
+                if (!r.ok) {
+                    handleFetchError(r, setIsFailedFetch, errors, setErrors);
+                } else setCases(r.cases);
+            });
+        getTotalLikes({infuraApi}).then(r => {
+            if (!r.ok) {
+                handleFetchError(r, setIsFailedFetch, errors, setErrors);
+            } else setTotalLikes(r.totalLikes.toString())
+        });
+        getMainInfo({infuraApi}).then(r => {
+            if (!r.ok) {
+                handleFetchError(r, setIsFailedFetch, errors, setErrors);
+            } else setMainInfo(r.mainInfo);
+        });
+    }, [setCases, setTotalLikes, setMainInfo, errors, infuraApi])
 
+    let header, leftBar, centralBar;
 
-    const header = <Header mainInfo={mainInfo}/>
-    const leftBar = <LeftBar mainInfo={mainInfo}/>
-    const centralBar = <CentralBar mainInfo={mainInfo} cases={cases} totalLikes={totalLikes}/>
+    if (isEdit) {
+        header = <EditHeader mainInfo={mainInfo} setMainInfo={setMainInfo} setIsEdit={setIsEdit} handleActiveAlert={handleActiveAlert}/>
+        leftBar = <EditLeftBar mainInfo={mainInfo} setMainInfo={setMainInfo}/>
+        centralBar = <EditCentralBar
+            mainInfo={mainInfo}
+            setMainInfo={setMainInfo}
+            cases={cases}
+            setCases={setCases}
+            totalLikes={totalLikes}
+            handleActiveAlert={handleActiveAlert}
+            infuraApi={infuraApi}
+        />
+    } else {
+        header = <ViewHeader mainInfo={mainInfo} setIsEdit={setIsEdit}/>
+        leftBar = <ViewLeftBar mainInfo={mainInfo}/>
+        centralBar = <ViewCentralBar mainInfo={mainInfo} cases={cases} totalLikes={totalLikes} setCases={setCases} handleActiveAlert={handleActiveAlert}/>
+    }
 
     return (
         <>
             {mainInfo.name
-                ? <Layout header={header} leftBar={leftBar} centralBar={centralBar}/>
-                : "Loading..."
+                ?
+                <Layout header={header} leftBar={leftBar} centralBar={centralBar}>
+                    {isEdit && <NotOwnerAlert/>}
+                    {isAlert && <Alert close={handleCloseAlert} text={alertText} type={alertType}/>}
+                </Layout>
+                : isFailedFetch ? "Fail page" : "Loading..."
             }
         </>
     )
+}
+
+export const getStaticProps = async () => {
+    const infuraApi = process.env.INFURA_API;
+
+    return {
+        props: {infuraApi: infuraApi}
+    }
+}
+
+const handleFetchError = (r, setIsFailedFetch, errors, setErrors) => {
+    setIsFailedFetch(true);
+    let newErrors = Array.from(errors)
+    newErrors.push(r.error)
+    setErrors(newErrors);
 }

@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
-const Layout = ({ header, leftBar, centralBar }) => {
+const Layout = ({ header, leftBar, centralBar, children }) => {
     return (
         <div className={"container"}>
+            {children}
             <div className="card mb-3 mt-3">
                 <div className="row g-0">
 
@@ -32,7 +33,7 @@ const ImgBox = styled.div`
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: 350px;
+  height: 360px;
 
   @media screen and (max-width: 1400px) {
     height: 400px;

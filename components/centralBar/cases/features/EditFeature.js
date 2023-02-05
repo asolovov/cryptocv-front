@@ -1,5 +1,4 @@
-const CaseFeature = ({cases, setCases, caseIndex, featureIndex, isEdit}) => {
-
+const EditFeature = ({cases, setCases, caseIndex, featureIndex}) => {
     const deleteFeature = () => {
         let newCases = Array.from(cases);
         newCases[caseIndex].info.features.splice(featureIndex, 1);
@@ -29,22 +28,17 @@ const CaseFeature = ({cases, setCases, caseIndex, featureIndex, isEdit}) => {
     }
 
     return (
-        <>
-            {isEdit
-                ?
-                <div className={"input-group mb-2"}>
-                    <button className={"btn btn-outline-danger"} onClick={deleteFeature}>Delete</button>
-                    <input
-                        className={"form-control"}
-                        value={cases[caseIndex].info.features[featureIndex]}
-                        onChange={event => handleChange(event)}
-                    />
-                    <button className={"btn btn-outline-success"} onClick={upFeature}>Up</button>
-                    <button className={"btn btn-outline-primary"} onClick={downFeature}>Down</button>
-                </div>
-                : <li className="list-group-item">{cases[caseIndex].info.features[featureIndex]}</li>}
-        </>
+        <div className={"input-group mb-2"}>
+            <button className={"btn btn-outline-danger"} onClick={deleteFeature}>Delete</button>
+            <input
+                className={"form-control"}
+                value={cases[caseIndex].info.features[featureIndex]}
+                onChange={event => handleChange(event)}
+            />
+            <button className={"btn btn-outline-success"} onClick={upFeature}>Up</button>
+            <button className={"btn btn-outline-primary"} onClick={downFeature}>Down</button>
+        </div>
     );
 };
 
-export default CaseFeature;
+export default EditFeature;

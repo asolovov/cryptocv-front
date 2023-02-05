@@ -1,7 +1,7 @@
-import CaseFeature from "@/components/viewCV/CaseFeature";
 import {useState} from "react";
+import EditFeature from "@/components/centralBar/cases/features/EditFeature";
 
-const CaseFeatures = ({cases, setCases, index, isEdit}) => {
+const EditFeatures = ({index, cases, setCases}) => {
     const [description, setDescription] = useState("");
     const {info} = cases[index];
 
@@ -11,26 +11,21 @@ const CaseFeatures = ({cases, setCases, index, isEdit}) => {
         setCases(newCases);
     }
 
-    const add =  isEdit
-        ?
-        <div className={"input-group mt-2 mb-2"}>
-            <button className={"btn btn-outline-secondary"} onClick={addFeature}>Add</button>
-            <input className={"form-control"} placeholder={"description"} onChange={event => setDescription(event.target.value)}/>
-        </div>
-        : null;
 
     return (
         <>
-            {add}
+            <div className={"input-group mt-2 mb-2"}>
+                <button className={"btn btn-outline-secondary"} onClick={addFeature}>Add</button>
+                <input className={"form-control"} placeholder={"description"} onChange={event => setDescription(event.target.value)}/>
+            </div>
             <ul className="list-group list-group-flush">
                 {info && info.features.map((_, featureIndex) =>
-                    <CaseFeature
+                    <EditFeature
                         key={featureIndex}
                         setCases={setCases}
                         cases={cases}
                         featureIndex={featureIndex}
                         caseIndex={index}
-                        isEdit={isEdit}
                     />
                 )}
             </ul>
@@ -38,4 +33,4 @@ const CaseFeatures = ({cases, setCases, index, isEdit}) => {
     );
 };
 
-export default CaseFeatures;
+export default EditFeatures;

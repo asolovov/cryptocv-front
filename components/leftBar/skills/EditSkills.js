@@ -1,20 +1,17 @@
 import {useState} from "react";
-import Skill from "@/components/viewCV/Skill";
+import EditSkill from "@/components/leftBar/skills/EditSkill";
+import {addInMainInfo} from "@/helpers/editMainInfoHelpers";
 
-const Skills = ({mainInfo, isEdit, setMainInfo}) => {
+const EditSkills = ({mainInfo, setMainInfo}) => {
     const [newName, setNewName] = useState('');
     const [newDescription, setNewDescription] = useState('');
 
-    const handleNewSkill = () => {
-        let newMainInfo = Object.assign({}, mainInfo);
-        newMainInfo.skills.push({ name: newName, description: newDescription });
-        setMainInfo(newMainInfo);
-    }
-
-    const add = isEdit
-        ?
+    return (
         <>
-            <button className={"btn btn-secondary mt-3 w-100"} onClick={handleNewSkill}>Add new skill</button>
+            <button
+                className={"btn btn-secondary mt-3 w-100"}
+                onClick={() => addInMainInfo(mainInfo, setMainInfo, "skills", { name: newName, description: newDescription })}
+            >Add new skill</button>
             <input
                 type={"text"}
                 className={"form-control mt-3"}
@@ -29,18 +26,11 @@ const Skills = ({mainInfo, isEdit, setMainInfo}) => {
                 onChange={event => setNewDescription(event.target.value)}
                 placeholder={"skill description"}
             />
-        </>
-        : null
-
-    return (
-        <>
-            {add}
             {mainInfo.skills && mainInfo.skills.map((_, index) =>
-                <Skill index={index} mainInfo={mainInfo} setMainInfo={setMainInfo} key={index} isEdit={isEdit}/>
+                <EditSkill  key={index} index={index} mainInfo={mainInfo} setMainInfo={setMainInfo}/>
             )}
         </>
     );
-
 };
 
-export default Skills;
+export default EditSkills;
