@@ -81,7 +81,7 @@ export default function Home({infuraApi}) {
                     {isEdit && <NotOwnerAlert/>}
                     {isAlert && <Alert close={handleCloseAlert} text={alertText} type={alertType}/>}
                 </Layout>
-                : isFailedFetch ? "Fail page" : "Loading..."
+                : isFailedFetch ? "I hope you will never see this..." : "Loading..."
             }
         </>
     )
