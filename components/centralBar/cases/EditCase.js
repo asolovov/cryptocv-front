@@ -6,7 +6,7 @@ import {deleteCase, getCases, updateCase} from "@/helpers/casesHelpers";
 const EditCase = ({index, cases, setCases, handleActiveAlert, infuraApi}) => {
     const {id} = cases[index];
 
-    const [info, _] = useState(cases[index].info)
+    const [info, setInfo] = useState(cases[index].info)
     const [startDate, setStartDate] = useState(
         isNaN(cases[index].startDate) || cases[index].startDate === "0"
             ? ""
@@ -20,9 +20,12 @@ const EditCase = ({index, cases, setCases, handleActiveAlert, infuraApi}) => {
 
 
     const handleChange = (target, event) => {
-        let newCases = Array.from(cases);
-        newCases[index].info[target] = event.target.value;
-        setCases(newCases);
+        let newInfo = Object.assign({}, info);
+        newInfo[target] = event.target.value
+        setInfo(newInfo);
+        // let newCases = Array.from(cases);
+        // newCases[index].info[target] = event.target.value;
+        // setCases(newCases);
     }
 
     const removeCase = async () => {
