@@ -23,9 +23,6 @@ const EditCase = ({index, cases, setCases, handleActiveAlert, infuraApi}) => {
         let newInfo = Object.assign({}, info);
         newInfo[target] = event.target.value
         setInfo(newInfo);
-        // let newCases = Array.from(cases);
-        // newCases[index].info[target] = event.target.value;
-        // setCases(newCases);
     }
 
     const removeCase = async () => {

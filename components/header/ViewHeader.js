@@ -1,6 +1,7 @@
 import HeaderLayout from "@/components/header/HeaderLayout";
 import styled from "styled-components";
 import {AiOutlineEdit} from "react-icons/ai";
+import Link from "next/link";
 
 const ViewHeader = ({mainInfo, setIsEdit}) => {
     const {name, position, hello} = mainInfo;
@@ -32,14 +33,14 @@ const ViewHeader = ({mainInfo, setIsEdit}) => {
                             <h5 className={"color-indigo"}>How does it work?</h5>
                             <p>When you open a web page, front-end app (Next.js) fetches data from my CV smart-contract
                                 deployed in Goerli blockchain test net using one of the web3 providers. Then the front-end
-                            app process information for you to see it in the right way. </p>
+                                app process information for you to see it in the right way. </p>
                             <p>If you will try to set a like on one of the cases, you will need to install metamask in
                                 your browser, connect to Goerli net and get Goerli test tokens, because when you set a
                                 like, you are interacting with my CV smart-contract.</p>
                             <h5 className={"color-indigo"}>And more</h5>
-                            <p>You can see the code of this front-end app and smart contract on my Github. This CV
-                            is a pet-project where I use my solidity and front-end prototyping skills to show you how
-                            it would work in your project.</p>
+                            <p>You can see the code of this <Link href={"https://github.com/asolovov/cryptocv-front"}>front-end app</Link> and <Link href={"https://github.com/asolovov/cryptocv-front"}>smart contract</Link> on
+                                my Github. This CV is a pet-project where I use my Solidity performance and front-end
+                                prototyping skills to show you how it would work in your project.</p>
 
                         </div>
                         <div className="modal-footer">
