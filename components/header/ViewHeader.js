@@ -9,6 +9,7 @@ const ViewHeader = ({mainInfo, setIsEdit}) => {
     const nameEl =
         <>
             <h2 className="card-title me-auto">{name}</h2>
+            <a className={"btn btn-outline-light m-1"} href={"/api/pdf"} download={"asolovov_cv.pdf"}>Download PDF</a>
             <Edit onClick={() => setIsEdit(true)}/>
         </>;
 
