@@ -3,7 +3,7 @@ import {styles} from "@/components/pdf/PDFStyles";
 import PDFSkills from "@/components/pdf/PDFSkills";
 import PDFCase from "@/components/pdf/PDFCase";
 
-const PDF = ({mainInfo, cases}) => {
+const PDF = ({mainInfo, cases, baseURL}) => {
     const {location, contacts, skills, name, position, helloPDF, background, education} = mainInfo;
     const {email, tg, github, linkedIn} = contacts;
 
@@ -13,7 +13,7 @@ const PDF = ({mainInfo, cases}) => {
                 <View style={styles.header}>
                     <View style={styles.flexRow}>
                         <View style={styles.col2}>
-                            <Image src={"public/av.jpg"} alt={"av"}/>
+                            <Image src={`${baseURL}/av.jpg`} alt={"av"}/>
                         </View>
                         <View style={styles.col8}>
                             <View style={styles.flexRow}>
