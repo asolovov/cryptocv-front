@@ -11,6 +11,8 @@ import {getTotalLikes} from "@/helpers/likesHelpers";
 import {getCases} from "@/helpers/casesHelpers";
 import Alert from "@/components/Alert";
 import NotOwnerAlert from "@/components/NotOwnerAlert";
+import Loading from "@/components/Loading";
+import FetchFailed from "@/components/FetchFailed";
 
 export default function Home({infuraApi}) {
     const [isEdit, setIsEdit] = useState(false);
@@ -81,7 +83,7 @@ export default function Home({infuraApi}) {
                     {isEdit && <NotOwnerAlert/>}
                     {isAlert && <Alert close={handleCloseAlert} text={alertText} type={alertType}/>}
                 </Layout>
-                : isFailedFetch ? "I hope you will never see this..." : "Loading..."
+                : isFailedFetch ? <FetchFailed/> : <Loading/>
             }
         </>
     )
