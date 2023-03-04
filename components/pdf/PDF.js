@@ -26,7 +26,7 @@ const PDF = ({mainInfo, cases, baseURL}) => {
                                     </Text>
                                 </View>
                                 <View style={styles.flexColAuto}>
-                                    <Image src={"public/cv-qr.png"} alt={"qr-code"} style={styles.qr}/>
+                                    <Image src={`${baseURL}/cv-qr.png`} alt={"qr-code"} style={styles.qr}/>
                                 </View>
                             </View>
                             <View style={styles.hrIndigo}/>
